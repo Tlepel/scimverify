@@ -1,0 +1,28 @@
+# docker build -f Dockerfile.cli -t my-cli .
+# docker run -e CONFIG_FILE=/app/config.yaml -e AUTH_HEADER="Bearer JdwETA7axAMc6AK35KYRclJDaoDkkRo4BaQtUnZZBvh1BqZ5RPSBZdA18ydD" -e BASE_URL="https://api.scim.dev/scim/v2" -e HAR_FILE_NAME="/output/output.har" -v $(pwd)/site/.vitepress/theme/components/config.yaml:/app/config.yaml -v $(pwd)/output/:/output  my-cli
+
+FROM node:21-alpine AS build
+
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm ci --only=production
+
+# Create a smaller final image
+FROM node:21-alpine
+
+WORKDIR /app
+
+# Copy only the necessary files from the build stage
+COPY --from=build /app/node_modules ./node_modules
+COPY src/ ./src/
+COPY reporters/ ./reporters/
+COPY *.js ./
+COPY *.json ./
+
+# Set the entrypoint
+ENTRYPOINT ["node", "--test"]
+CMD ["--test-reporter=spec"]
