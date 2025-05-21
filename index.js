@@ -1,17 +1,24 @@
-import { run } from 'node:test';
-import path from 'path';
-import { fileURLToPath } from 'url';
+// Main entry point for the scimverify package
+import { runAllTests } from './scim.test.js';
+import runBasicTests from './src/basics.js';
+import runUserTests from './src/users.js';
+import runGroupTests from './src/groups.js';
+import runResourceTypeTests from './src/resourcetypes.js';
+import { runTests as runSchemaTests } from './src/schemas.js';
+import { getAxiosInstance, writeHarFile, clearHarEntries } from './src/helpers.js';
 
+// Export main functionality
+export { 
+  runAllTests,
+  runBasicTests,
+  runUserTests, 
+  runGroupTests,
+  runResourceTypeTests,
+  runSchemaTests,
+  getAxiosInstance,
+  writeHarFile,
+  clearHarEntries
+};
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// Run tests sequentially and pipe directly to NDJSON reporter and stdout
-run({
-  files: [path.resolve(__dirname, 'scim.test.js')],
-  concurrency: 1,
-  reporter: 'spec'
-}).on('test:fail', () => {
-  process.exitCode = 1;
-})
-  .pipe(process.stdout);
+// Default export for convenience
+export default runAllTests;

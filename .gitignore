@@ -4,3 +4,4 @@ site/.vitepress/cache/
 
 # Local Netlify folder
 .netlify
+output/output.har

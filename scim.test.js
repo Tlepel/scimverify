@@ -76,62 +76,65 @@ export async function runAllTests(config) {
     }
 }
 
-if (process.env.CONFIG_FILE) {
-    // If a config file is provided, read it and parse it
-    const configFilePath = path.resolve(process.cwd(), process.env.CONFIG_FILE);
-    process.env.CONFIG = await fs.readFile(configFilePath, 'utf8');
-}
-
-if (!process.env.CONFIG) {
-    // If no config file is provided, check if the config is passed as an environment variable
-    console.error('No CONFIG or CONFIG_FILE environment variable provided. Exiting.');
-    process.exit(1);
-}
-
-try {
-    parse(process.env.CONFIG);
-} catch (error) {
-    console.error('Invalid YAML configuration provided:', error.message);
-    process.exit(1);
-}
-
-// Check if the configuration is valid
-if (!process.env.BASE_URL) {
-    console.error('Environment variable BASE_URL is required');
-    process.exit(1);
-}
-if (!process.env.AUTH_HEADER) {
-    console.error('Environment variable AUTH_HEADER is required');
-    process.exit(1);
-}
-
-// Run the tests by default when the file is imported
-runAllTests(
-    {
-        baseURL: process.env.BASE_URL,
-        authHeader: process.env.AUTH_HEADER,
-        ...parse(process.env.CONFIG),
+// Check if this file is being run directly
+if (import.meta.url === `file://${process.argv[1]}`) {
+    if (process.env.CONFIG_FILE) {
+        // If a config file is provided, read it and parse it
+        const configFilePath = path.resolve(process.cwd(), process.env.CONFIG_FILE);
+        process.env.CONFIG = await fs.readFile(configFilePath, 'utf8');
     }
-).then((result) => {
-    if (!result.success) {
+
+    if (!process.env.CONFIG) {
+        // If no config file is provided, check if the config is passed as an environment variable
+        console.error('No CONFIG or CONFIG_FILE environment variable provided. Exiting.');
         process.exit(1);
     }
-}).catch((error) => {
-    console.error('Error running tests:', error);
-    process.exit(1);
-}).finally(() => {
-    if(process.env.HAR_FILE_NAME) {
-        // Make sure the HAR file has the correct extension
-        let harFileName = process.env.HAR_FILE_NAME;
-        if (!harFileName.toLowerCase().endsWith('.har')) {
-            harFileName += '.har';
-        }
 
-        console.log('Writing HAR file:', harFileName);
-
-        writeHarFile(harFileName);
+    try {
+        parse(process.env.CONFIG);
+    } catch (error) {
+        console.error('Invalid YAML configuration provided:', error.message);
+        process.exit(1);
     }
 
-    clearHarEntries();
+    // Check if the configuration is valid
+    if (!process.env.BASE_URL) {
+        console.error('Environment variable BASE_URL is required');
+        process.exit(1);
+    }
+    if (!process.env.AUTH_HEADER) {
+        console.error('Environment variable AUTH_HEADER is required');
+        process.exit(1);
+    }
 
-});
+    // Run the tests by default when the file is imported
+    runAllTests(
+        {
+            baseURL: process.env.BASE_URL,
+            authHeader: process.env.AUTH_HEADER,
+            ...parse(process.env.CONFIG),
+        }
+    ).then((result) => {
+        if (!result.success) {
+            process.exit(1);
+        }
+    }).catch((error) => {
+        console.error('Error running tests:', error);
+        process.exit(1);
+    }).finally(() => {
+        if(process.env.HAR_FILE_NAME) {
+            // Make sure the HAR file has the correct extension
+            let harFileName = process.env.HAR_FILE_NAME;
+            if (!harFileName.toLowerCase().endsWith('.har')) {
+                harFileName += '.har';
+            }
+
+            console.log('Writing HAR file:', harFileName);
+
+            writeHarFile(harFileName);
+        }
+
+        clearHarEntries();
+
+    });
+}

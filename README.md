@@ -6,13 +6,18 @@ This tool is created to check the SCIM (System for Cross-domain Identity Managem
 
 ## Usage
 
-~~~
-CONFIG_FILE=./site/.vitepress/theme/components/config.yaml \
-AUTH_HEADER="Bearer REPLACE_THIS" \
-BASE_URL="https://api.scim.dev/scim/v2" \
-HAR_FILE_NAME="/output/output.har" \
-node --test
-~~~
+You can use SCIM Verify directly with npx without installing it globally:
+
+```bash
+npx scimverify --base-url https://api.scim.dev/scim/v2 --auth-header "Bearer YOUR_TOKEN" --config ./config.yaml
+```
+
+Options:
+- `-b, --base-url <url>` - Base URL of the SCIM server (required)
+- `-a, --auth-header <auth>` - Authorization header (required)
+- `-c, --config <path>` - Path to YAML configuration file (optional)
+- `-o, --har-file <path>` - Path to write HAR file output (optional)
+- `-h, --help` - Show help message
 
 ## Features
 
