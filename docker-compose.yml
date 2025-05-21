@@ -1,8 +1,7 @@
 version: '3.8'
 
 services:
-  # Node server for running SCIM verification tests
-  scimserver:
+  scimverify:
     build:
       context: .
       dockerfile: Dockerfile

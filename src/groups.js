@@ -3,7 +3,6 @@ import assert from 'node:assert';
 import { getAxiosInstance, canonicalize } from './helpers.js';
 import dotenv from 'dotenv';
 import Ajv from 'ajv';
-import { group } from 'node:console';
 
 dotenv.config();
 

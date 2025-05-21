@@ -8,7 +8,15 @@
     "local": "node scim.test.js"
   },
   "author": "",
-  "license": "ISC",
+  "license": "GPL-3.0-only",
+  "homepage": "https://verify.scim.dev",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/limosa-io/scimverify"
+  },
+  "bugs": {
+    "url": "https://github.com/limosa-io/scimverify/issues"
+  },
   "dependencies": {
     "@codemirror/lang-yaml": "^6.1.2",
     "@codemirror/state": "^6.5.2",
@@ -32,5 +40,9 @@
   "directories": {
     "doc": "doc"
   },
-  "keywords": []
+  "keywords": ["scim", "verification", "testing", "api"],
+  "links": {
+    "website": "https://scim.dev",
+    "verification": "https://verify.scim.dev"
+  }
 }

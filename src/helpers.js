@@ -1,9 +1,5 @@
 import axios from 'axios';
 import fs from 'fs';
-import dotenv from 'dotenv';
-import test from 'node:test';
-import path from 'path';
-import { fileURLToPath } from 'url';
 
 let harEntries = [];
 
