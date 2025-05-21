@@ -14,7 +14,6 @@
     "start": "node server.js",
     "local": "node scim.test.js",
     "test": "node scim.test.js",
-    "prepublishOnly": "npm test",
     "publish": "npm publish --access public"
   },
   "author": "limosa-io",
