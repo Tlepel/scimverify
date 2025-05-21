@@ -4,6 +4,16 @@
 
 This tool is created to check the SCIM (System for Cross-domain Identity Management) conformance of your SCIM server.
 
+## Usage
+
+~~~
+CONFIG_FILE=./site/.vitepress/theme/components/config.yaml \
+AUTH_HEADER="Bearer REPLACE_THIS" \
+BASE_URL="https://api.scim.dev/scim/v2" \
+HAR_FILE_NAME="/output/output.har" \
+node --test
+~~~
+
 ## Features
 
 - Validate SCIM endpoints
